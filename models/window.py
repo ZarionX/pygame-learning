@@ -6,8 +6,8 @@ from models.player import Player
 
 
 class Window:
-    SIZE: Tuple[int, int]
-    TITLE: str
+    size: Tuple[int, int]
+    title: str
     running: bool = True
     screen: pygame.Surface
     background: Background
@@ -15,11 +15,11 @@ class Window:
     pressed: Dict[int, bool] = {}
 
     def set_size(self, size: Tuple[int, int]) -> None:
-        self.SIZE = size
+        self.size = size
         self.screen = pygame.display.set_mode(size)
     
     def set_title(self, title: str) -> None:
-        self.TITLE = title
+        self.title = title
         pygame.display.set_caption(title)
 
     def set_background(self, image_path: str, position: Tuple[int, int]) -> None:
