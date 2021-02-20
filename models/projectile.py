@@ -21,20 +21,23 @@ class Projectile(pygame.sprite.Sprite):
     def remove(self, player) -> None:
         player.projectiles.remove(self)
 
-    def move(self, player, screen: pygame.Surface) -> None:
+    def move(self,game) -> None:
         if self.direction == "left":
             if self.rect.x > 0:
                 self.rotate()
                 self.rect.x -= self.velocity
+                if pygame.sprite.spritecollide(self, game.monsters, False, pygame.sprite.collide_mask):
+                    self.remove(game.player)
             else:
-                self.remove(player)
+                self.remove(game.player)
         else:
-            if self.rect.x + self.rect.width < screen.get_width():
+            if self.rect.x + self.rect.width < game.screen.get_width():
                 self.rotate()
                 self.rect.x += self.velocity
+                if pygame.sprite.spritecollide(self, game.monsters, False, pygame.sprite.collide_mask):
+                    self.remove(game.player)
             else:
-                self.remove(player)
-
+                self.remove(game.player)
 
     def __init__(self, player, image_path: str, direction: str) -> None:
         super().__init__()

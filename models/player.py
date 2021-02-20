@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from typing import Tuple
 import pygame
-from pygame.sprite import Group
 from models.projectile import Projectile
 
 
 class Player(pygame.sprite.Sprite):
     image: pygame.Surface
     rect: pygame.Rect
-    projectiles: Group = Group()
+    projectiles = pygame.sprite.Group()
 
     def convert(self, image_path: str) -> None:
         self.image = pygame.image.load(image_path)
