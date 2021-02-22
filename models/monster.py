@@ -19,6 +19,15 @@ class Monster(pygame.sprite.Sprite):
             elif self.direction == "left":
                 self.rect.x -= self.velocity
 
+    def update_health_bar(self, screen: pygame.Surface) -> None:
+        back_bar_color = (142, 142, 142)
+        bar_color = (84, 223, 50)
+        back_bar_position = pygame.Surface((self.max_health, 5)).get_rect()
+        back_bar_position.centerx = self.rect.centerx
+        back_bar_position.y = self.rect.y - 10
+        bar_position = (back_bar_position.x, back_bar_position.y, self.health, 5)
+        pygame.draw.rect(screen, back_bar_color, back_bar_position)
+        pygame.draw.rect(screen, bar_color, bar_position)
 
     def __init__(self, image_path: str, position: Tuple[int, int], direction: str) -> None:
         super().__init__()

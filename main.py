@@ -53,6 +53,7 @@ while game.running:
     game.player.projectiles.draw(game.screen)
     for monster in game.monsters:
         monster.forward(game.player)
+        monster.update_health_bar(game.screen)
     game.monsters.draw(game.screen)
     pygame.display.flip()
 
