@@ -26,16 +26,18 @@ class Projectile(pygame.sprite.Sprite):
             if self.rect.x > 0:
                 self.rotate()
                 self.rect.x -= self.velocity
-                if pygame.sprite.spritecollide(self, game.monsters, False, pygame.sprite.collide_mask):
+                for monster in pygame.sprite.spritecollide(self, game.monsters, False, pygame.sprite.collide_mask):
                     self.remove(game.player)
+                    monster.damage(self.attack, game)
             else:
                 self.remove(game.player)
         else:
             if self.rect.x + self.rect.width < game.screen.get_width():
                 self.rotate()
                 self.rect.x += self.velocity
-                if pygame.sprite.spritecollide(self, game.monsters, False, pygame.sprite.collide_mask):
+                for monster in pygame.sprite.spritecollide(self, game.monsters, False, pygame.sprite.collide_mask):
                     self.remove(game.player)
+                    monster.damage(self.attack, game)
             else:
                 self.remove(game.player)
 

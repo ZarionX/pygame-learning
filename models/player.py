@@ -24,6 +24,17 @@ class Player(pygame.sprite.Sprite):
 
     def launch_projectile(self, image_path: str, direction: str) -> None:
         self.projectiles.add(Projectile(self, image_path, direction))
+
+    def update_health_bar(self, screen: pygame.Surface) -> None:
+        back_bar_position = pygame.Surface((self.max_health, 5)).get_rect()
+        back_bar_position.centerx = self.rect.centerx
+        back_bar_position.y = self.rect.y + 10
+        bar_position = (back_bar_position.x, back_bar_position.y, self.health, 5)
+        pygame.draw.rect(screen, (142, 142, 142), back_bar_position)
+        pygame.draw.rect(screen, (84, 223, 50), bar_position)
+
+    def damage(self, damage: int) -> None:
+        self.health -= damage
     
     def __init__(self, image_path: str, initial_pos: Tuple[int, int]) -> None:
         super().__init__()

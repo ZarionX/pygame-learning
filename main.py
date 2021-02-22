@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
+import random
 from models.window import Window
 pygame.init()
 
@@ -13,7 +14,11 @@ MUMMY = "./assets/mummy.png"
 game = Window(SIZE, TITLE)
 game.set_background(BACKGROUND, (0, -220))
 game.set_player(PLAYER, (450, 500))
-game.add_monster(MUMMY, (game.screen.get_width(), 550), "left")
+for i in range(2):
+    if random.randint(1, 2) == 1:
+        game.add_monster(MUMMY, (game.screen.get_width(), 550), "left")
+    else:
+        game.add_monster(MUMMY, (0, 550), "right")
 
 while game.running:
     for event in pygame.event.get():
@@ -48,6 +53,7 @@ while game.running:
 
     game.background.load(game.screen)
     game.player.load(game.screen)
+    game.player.update_health_bar(game.screen)
     for projectile in game.player.projectiles:
         projectile.move(game)
     game.player.projectiles.draw(game.screen)
