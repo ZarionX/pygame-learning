@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import pygame
 import random
+
+from pygame.constants import MOUSEBUTTONDOWN
 from models.window import Window
 pygame.init()
 
@@ -8,11 +10,14 @@ TITLE = "My First Game"
 SIZE = (1080, 720)
 BACKGROUND = "./assets/bg.jpg"
 PLAYER = "./assets/player.png"
-PROJECTILE = "./assets/projectile.png"
 MUMMY = "./assets/mummy.png"
+BANNER = "./assets/banner.png"
+BUTTON = "./assets/button.png"
 
 game = Window(SIZE, TITLE)
 game.set_background(BACKGROUND, (0, -220))
+game.set_banner(BANNER, (int(game.screen.get_width() / 4), 0))
+game.set_button(BUTTON, (int(game.screen.get_width() / 3.33), int(game.screen.get_width() / 3)))
 game.set_player(PLAYER, (450, 500))
 for i in range(2):
     if random.randint(1, 2) == 1:
@@ -21,46 +26,19 @@ for i in range(2):
         game.add_monster(MUMMY, (0, 550), "right")
 
 while game.running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game.running = False
-            break
-        if event.type == pygame.KEYDOWN:
-            game.pressed[event.key] = True
-            if event.key == pygame.K_RIGHT:
-                game.player.launch_projectile(PROJECTILE, "right")
-            if event.key == pygame.K_LEFT:
-                game.player.launch_projectile(PROJECTILE, "left")
-        elif event.type == pygame.KEYUP:
-            game.pressed[event.key] = False
-
-    if game.pressed.get(pygame.K_a):
-        if game.player.rect.x > 0:
-            move: bool = True
-            for monster in game.monsters:
-                if game.collision(game.player, monster)["left"]:
-                    move = False
-            if move:
-                game.player.move_left()
-    if game.pressed.get(pygame.K_d):
-        if game.player.rect.x + game.player.rect.width < game.screen.get_width():
-            move: bool = True
-            for monster in game.monsters:
-                if game.collision(game.player, monster)["right"]:
-                    move = False
-            if move:
-                game.player.move_right()
-
     game.background.load(game.screen)
-    game.player.load(game.screen)
-    game.player.update_health_bar(game.screen)
-    for projectile in game.player.projectiles:
-        projectile.move(game)
-    game.player.projectiles.draw(game.screen)
-    for monster in game.monsters:
-        monster.forward(game.player)
-        monster.update_health_bar(game.screen)
-    game.monsters.draw(game.screen)
+    if game.playing:
+        game.update()
+    else:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game.running = False
+                break
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if game.button.rect.collidepoint(event.pos):
+                    game.start()
+        game.button.load(game.screen)
+        game.banner.load(game.screen)
     pygame.display.flip()
 
 pygame.quit()

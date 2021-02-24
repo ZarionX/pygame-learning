@@ -33,8 +33,10 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(screen, (142, 142, 142), back_bar_position)
         pygame.draw.rect(screen, (84, 223, 50), bar_position)
 
-    def damage(self, damage: int) -> None:
+    def damage(self, damage: int, game) -> None:
         self.health -= damage
+        if self.health <= 0:
+            game.stop()
     
     def __init__(self, image_path: str, initial_pos: Tuple[int, int]) -> None:
         super().__init__()
