@@ -41,6 +41,9 @@ class Monster(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.initial_image, True, False)
         self.health = self.max_health 
         self.velocity = random.randint(1, 5)
+        if game.comet_event.full_loaded():
+            game.monsters.remove(self)
+            game.comet_event.try_fall("./assets/comet.png", game)
 
     def damage(self, damage: int, game) -> None:
         self.health -= damage

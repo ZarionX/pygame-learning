@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import pygame
 import random
-
-from pygame.constants import MOUSEBUTTONDOWN
 from models.window import Window
 pygame.init()
 

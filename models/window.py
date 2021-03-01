@@ -6,6 +6,7 @@ from models.player import Player
 from models.monster import Monster
 from models.bannner import Banner
 from models.button import Button
+from models.comet_event import CometFallEvent
 
 
 class Window:
@@ -18,6 +19,7 @@ class Window:
     banner: Banner
     button: Button
     player: Player
+    comet_event: CometFallEvent = CometFallEvent()
     monsters = pygame.sprite.Group()
     pressed: Dict[int, bool] = {}
 
@@ -50,11 +52,14 @@ class Window:
     def stop(self) -> None:
         self.player.health = self.player.max_health
         self.playing = False
+        self.comet_event.reset_percent()
+        self.comet_event.comets = pygame.sprite.Group()
         for monster in self.monsters:
             monster.die(self)
+        
 
-    def collision(self, sprite1, sprite2) -> None:
-        result: Dict[str, bool] = {"left": False, "right": False}
+    def collision(self, sprite1, sprite2) -> Dict[str, bool]:
+        result: Dict[str, bool] = {"left": False, "right": False, "top": False, "bottom": False}
         collision = pygame.sprite.collide_mask(sprite1, sprite2)
         if collision:
             x: int = collision[0]
@@ -63,6 +68,12 @@ class Window:
                 result["left"] = True
             elif x > width / 2:
                 result["right"] = True
+            y: int = collision[1]
+            height: int = sprite1.rect.height
+            if y < height / 2:
+                result["top"] = True
+            elif y > height / 2:
+                result["bottom"] = True
         return result
 
     def update(self) -> None:
@@ -98,6 +109,10 @@ class Window:
 
         self.player.load(self.screen)
         self.player.update_health_bar(self.screen)
+        self.comet_event.update_percent(self.screen)
+        for comet in self.comet_event.comets:
+            comet.fall(self)
+        self.comet_event.comets.draw(self.screen)
         for projectile in self.player.projectiles:
             projectile.move(self)
         self.player.projectiles.draw(self.screen)
