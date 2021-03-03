@@ -2,25 +2,26 @@
 import pygame
 import random
 from typing import Tuple
+import models.animation as animation
 
 
-class Monster(pygame.sprite.Sprite):
+class Monster(animation.AnimateSprite):
     image: pygame.Surface
     rect: pygame.Rect
 
-    def convert(self, image_path: str) -> None:
-        self.image = pygame.image.load(image_path)
-        self.initial_image = self.image
-        self.rect = self.image.get_rect()
-
     def forward(self, game) -> None:
         if not pygame.sprite.collide_mask(self, game.player):
+            self.animating = True
             if self.direction == "right":
                 self.rect.x += self.velocity
             elif self.direction == "left":
                 self.rect.x -= self.velocity
         else:
+            self.animating = False
             game.player.damage(self.attack, game)
+
+    def update_animation(self) -> None:
+        self.animate(self.direction, True)
 
     def update_health_bar(self, screen: pygame.Surface) -> None:
         back_bar_position = pygame.Surface((self.max_health, 5)).get_rect()
@@ -51,11 +52,12 @@ class Monster(pygame.sprite.Sprite):
             self.die(game)
 
     def __init__(self, image_path: str, position: Tuple[int, int], direction: str) -> None:
-        super().__init__()
-        self.convert(image_path)
+        super().__init__("mummy")
         self.direction: str = direction
+        self.initial_image = self.image
         if direction == "right":
             self.image = pygame.transform.flip(self.image, True, False)
+        self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = position
         self.max_health: int = 100
         self.health = self.max_health

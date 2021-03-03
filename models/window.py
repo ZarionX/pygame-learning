@@ -106,7 +106,7 @@ class Window:
                         move = False
                 if move:
                     self.player.move_right()
-
+        self.player.update_animation()
         self.player.load(self.screen)
         self.player.update_health_bar(self.screen)
         self.comet_event.update_percent(self.screen)
@@ -117,6 +117,7 @@ class Window:
             projectile.move(self)
         self.player.projectiles.draw(self.screen)
         for monster in self.monsters:
+            monster.update_animation()
             monster.forward(self)
             monster.update_health_bar(self.screen)
         self.monsters.draw(self.screen)
