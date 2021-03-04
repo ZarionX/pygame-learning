@@ -3,7 +3,7 @@ import pygame
 from typing import Tuple, Dict
 from models.background import Background
 from models.player import Player
-from models.monster import Monster
+from models.monster import Alien, Mummy
 from models.bannner import Banner
 from models.button import Button
 from models.comet_event import CometFallEvent
@@ -34,11 +34,14 @@ class Window:
     def set_background(self, image_path: str, position: Tuple[int, int]) -> None:
         self.background = Background(image_path, position)
 
-    def set_player(self, image_path: str, initial_pos: Tuple[int, int]) -> None:
-        self.player = Player(image_path, initial_pos)
+    def set_player(self, initial_pos: Tuple[int, int]) -> None:
+        self.player = Player(initial_pos)
 
-    def add_monster(self, image_path: str, position: Tuple[int, int], direction: str) -> None:
-        self.monsters.add(Monster(image_path, position, direction))
+    def add_mummy(self, position: Tuple[int, int], direction: str) -> None:
+        self.monsters.add(Mummy(position, direction))
+
+    def add_alien(self, position: Tuple[int, int], direction: str) -> None:
+        self.monsters.add(Alien(position, direction))
 
     def set_banner(self, image_path: str, position: Tuple[int, int]) -> None:
         self.banner = Banner(image_path, position)

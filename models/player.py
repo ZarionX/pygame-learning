@@ -40,9 +40,8 @@ class Player(animation.AnimateSprite):
         if self.health <= 0:
             game.stop()
     
-    def __init__(self, image_path: str, initial_pos: Tuple[int, int]) -> None:
-        super().__init__("player")
-        self.rect = self.image.get_rect()
+    def __init__(self, initial_pos: Tuple[int, int]) -> None:
+        super().__init__("player", (200, 200))
         self.rect.x, self.rect.y = initial_pos
         self.max_health: int = 100
         self.health: int = self.max_health

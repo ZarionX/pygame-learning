@@ -51,18 +51,30 @@ class Monster(animation.AnimateSprite):
         if self.health <= 0:
             self.die(game)
 
-    def __init__(self, image_path: str, position: Tuple[int, int], direction: str) -> None:
-        super().__init__("mummy")
+    def __init__(self, position: Tuple[int, int], direction: str, name: str, size: Tuple[int, int]) -> None:
+        super().__init__(name, size)
         self.direction: str = direction
         self.initial_image = self.image
         if direction == "right":
             self.image = pygame.transform.flip(self.image, True, False)
-        self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = position
+
+class Mummy(Monster):
+    def __init__(self, position: Tuple[int, int], direction: str) -> None:
+        super().__init__(position, direction, "mummy", (125, 125))
         self.max_health: int = 100
         self.health = self.max_health
-        self.velocity: int = random.randint(1, 5)
+        self.velocity: int = random.randint(2, 5)
         self.attack: float = 0.3
+
+class Alien(Monster):
+    def __init__(self, position: Tuple[int, int], direction: str) -> None:
+        super().__init__(position, direction, "alien", (300, 300))
+        self.max_health: int = 250
+        self.health = self.max_health
+        self.velocity: int = random.randint(1, 3)
+        self.attack: float = 0.8
+
         
 
 

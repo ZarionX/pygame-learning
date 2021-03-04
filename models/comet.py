@@ -27,9 +27,13 @@ class Comet(pygame.sprite.Sprite):
             game.comet_event.reset_percent()
             for i in range(2):
                 if random.randint(1, 2) == 1:
-                    game.add_monster("./assets/mummy.png", (game.screen.get_width(), 550), "left")
+                    game.add_mummy((game.screen.get_width(), 550), "left")
                 else:
-                    game.add_monster("./assets/mummy.png", (0, 550), "right")
+                    game.add_mummy((0, 550), "right")
+            if random.randint(1, 2) == 1:
+                game.add_alien((game.screen.get_width(), 400), "left")
+            else:
+                game.add_alien((0, 400), "right")
 
     def __init__(self, image_path: str, screen: pygame.Surface) -> None:
         super().__init__()
