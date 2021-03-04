@@ -50,6 +50,7 @@ class Monster(animation.AnimateSprite):
         self.health -= damage
         if self.health <= 0:
             self.die(game)
+            game.score += self.score
 
     def __init__(self, position: Tuple[int, int], direction: str, name: str, size: Tuple[int, int]) -> None:
         super().__init__(name, size)
@@ -66,6 +67,7 @@ class Mummy(Monster):
         self.health = self.max_health
         self.velocity: int = random.randint(2, 5)
         self.attack: float = 0.3
+        self.score = 5
 
 class Alien(Monster):
     def __init__(self, position: Tuple[int, int], direction: str) -> None:
@@ -74,6 +76,7 @@ class Alien(Monster):
         self.health = self.max_health
         self.velocity: int = random.randint(1, 3)
         self.attack: float = 0.8
+        self.score = 10
 
         
 

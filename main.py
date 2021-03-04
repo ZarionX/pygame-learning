@@ -3,6 +3,7 @@ import pygame
 import random
 from models.window import Window
 pygame.init()
+pygame.mixer.pre_init(44100, 16, 2, 4096)
 
 TITLE = "My First Game"
 SIZE = (1080, 720)
@@ -41,6 +42,7 @@ while game.running:
                 break
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if game.button.rect.collidepoint(event.pos):
+                    game.sounds.play("click")
                     game.start()
         game.button.load(game.screen)
         game.banner.load(game.screen)

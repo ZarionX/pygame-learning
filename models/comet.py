@@ -11,16 +11,17 @@ class Comet(pygame.sprite.Sprite):
         self.image = pygame.image.load(image_path)
         self.rect = self.image.get_rect()
 
-    def remove(self, comet_event) -> None:
-        comet_event.comets.remove(self)
+    def remove(self, game) -> None:
+        game.sounds.play("meteorite")
+        game.comet_event.comets.remove(self)
 
     def fall(self, game) -> None:
         self.rect.y += self.velocity
         if self.rect.y >= game.screen.get_height() - self.rect.height:
-            self.remove(game.comet_event)
+            self.remove(game)
         if True in game.collision(game.player, self).values():
             game.collision(game.player, self)
-            self.remove(game.comet_event)
+            self.remove(game)
             game.player.damage(self.attack, game)
         if len(game.comet_event.comets) == 0:
             game.comet_event.falling = False

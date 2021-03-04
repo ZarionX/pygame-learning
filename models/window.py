@@ -7,6 +7,7 @@ from models.monster import Alien, Mummy
 from models.bannner import Banner
 from models.button import Button
 from models.comet_event import CometFallEvent
+from models.sounds import SoundsManager
 
 
 class Window:
@@ -19,9 +20,10 @@ class Window:
     banner: Banner
     button: Button
     player: Player
-    comet_event: CometFallEvent = CometFallEvent()
+    comet_event = CometFallEvent()
     monsters = pygame.sprite.Group()
     pressed: Dict[int, bool] = {}
+    score: int = 0
 
     def set_size(self, size: Tuple[int, int]) -> None:
         self.size = size
@@ -53,6 +55,8 @@ class Window:
         self.playing = True
 
     def stop(self) -> None:
+        self.sounds.play("game_over")
+        self.score = 0
         self.player.health = self.player.max_health
         self.playing = False
         self.comet_event.reset_percent()
@@ -87,9 +91,9 @@ class Window:
             if event.type == pygame.KEYDOWN:
                 self.pressed[event.key] = True
                 if event.key == pygame.K_RIGHT:
-                    self.player.launch_projectile("./assets/projectile.png", "right")
+                    self.player.launch_projectile("./assets/projectile.png", "right", self)
                 if event.key == pygame.K_LEFT:
-                    self.player.launch_projectile("./assets/projectile.png", "left")
+                    self.player.launch_projectile("./assets/projectile.png", "left", self)
             elif event.type == pygame.KEYUP:
                 self.pressed[event.key] = False
 
@@ -109,6 +113,10 @@ class Window:
                         move = False
                 if move:
                     self.player.move_right()
+        
+        #custom font: pygame.font.Font(path_to_ttf, size)
+        # for better performance set font as class attribute
+        self.screen.blit(pygame.font.SysFont("sans-serif", 25).render(f"Score: {self.score}", 0, (0, 0, 0)), (20, 20))
         self.player.update_animation()
         self.player.load(self.screen)
         self.player.update_health_bar(self.screen)
@@ -128,3 +136,4 @@ class Window:
     def __init__(self, size: Tuple[int, int], title: str) -> None:
         self.set_size(size)
         self.set_title(title)
+        self.sounds = SoundsManager()

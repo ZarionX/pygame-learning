@@ -22,10 +22,11 @@ class Player(animation.AnimateSprite):
     def update_animation(self) -> None:
         self.animate(self.direction)
 
-    def launch_projectile(self, image_path: str, direction: str) -> None:
+    def launch_projectile(self, image_path: str, direction: str, game) -> None:
         self.projectiles.add(Projectile(self, image_path, direction))
         self.direction = direction
         self.start_animation()
+        game.sounds.play("tir")
 
     def update_health_bar(self, screen: pygame.Surface) -> None:
         back_bar_position = pygame.Surface((self.max_health, 5)).get_rect()
